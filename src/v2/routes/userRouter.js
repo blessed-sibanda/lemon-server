@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const merge = require('lodash/merge');
 const { formatError } = require('../../helpers/dbErrorHandler');
-const { userById } = require('../../services/userService');
+const { userById, findUsers } = require('../../services/userService');
 const User = require('../../models/user');
 const {
   requireAuth,
@@ -9,12 +9,20 @@ const {
   isManager,
 } = require('../../services/authService');
 require('mongoose-paginate-v2');
+var debug = require('debug')('lemon-server:userRouter');
 
 const router = Router();
 
 router.get('/', async (req, res) => {
-  let users = await User.find().sort('-createdAt');
-  res.json(users);
+  try {
+    let result = await findUsers(req.query);
+    res.json({
+      data: result.docs,
+      total: result.totalDocs,
+    });
+  } catch (err) {
+    res.status(err.statusCode || 400).json(formatError(err));
+  }
 });
 
 router.post('/', async (req, res) => {

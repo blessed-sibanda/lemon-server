@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const config = require('../config');
+var debug = require('debug')('lemon-server:db');
 
 if (!config.mongoUri) {
   console.error('MongoDB connection string missing!');
@@ -13,4 +14,10 @@ db.on('error', (err) => {
   process.exit(1);
 });
 
-db.once('open', () => console.log('MongoDB connection established'));
+db.once('open', () => {
+  console.log('MongoDB connection established');
+
+  mongoose.set('debug', (collectionName, method, query, doc) => {
+    debug(`${collectionName}.${method}`, JSON.stringify(query), doc);
+  });
+});

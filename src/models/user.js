@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const userSchema = new mongoose.Schema(
   {
@@ -110,5 +111,35 @@ userSchema.path('hashedPassword').validate(function (v) {
     this.invalidate('password', 'Password is required');
   }
 }, null);
+
+userSchema.index(
+  { 'name.first': 'text', email: 'text', 'name.last': 'text' },
+  { name: 'Text Index', weights: { 'name.last': 4, 'name.first': 2, email: 1 } },
+);
+
+userSchema.statics.lookUpNested = {
+  firstName: 'name.first',
+  lastName: 'name.last',
+};
+
+const nestedFields = ['firstName', 'lastName'];
+
+const allowedFilterFields = [...nestedFields, 'email', 'role'];
+
+userSchema.statics.normalizedSortFields = function (sortKey = '') {
+  if (sortKey.length == 0) return [];
+  let sortObj = {};
+  sortKey.split(',').forEach((key) => {
+    let newKey = key.startsWith('-') ? key.split('').splice(1).join('') : key;
+    if (!allowedFilterFields.includes(newKey))
+      throw new Error(`'${newKey}' is not a valid sort field`);
+    if (nestedFields.includes(newKey)) newKey = this.lookUpNested[newKey];
+    sortObj[newKey] = key.startsWith('-') ? -1 : 1;
+  });
+
+  return Object.keys(sortObj).map((key) => [key, sortObj[key]]);
+};
+
+userSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('User', userSchema);

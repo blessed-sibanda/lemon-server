@@ -6,6 +6,6 @@ module.exports = {
       (process.env.IP || 'localhost') +
       ':' +
       (process.env.MONGO_PORT || '27017') +
-      '/lemon',
+      '/lemon-mart',
   jwtSecret: process.env.JWT_SECRET || 'my-secret',
 };
