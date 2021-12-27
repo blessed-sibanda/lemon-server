@@ -1,0 +1,84 @@
+{
+	"info": {
+		"_postman_id": "f29f39b3-b6d4-413e-b5a4-149b8998ce3a",
+		"name": "Lemon Server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "v1",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"blessed@gmail.com\",\n    \"password\": \"1234pass\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/v1/auth/login",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "v2",
+			"item": [
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "Create User",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"blessed@gmail.com\",\n    \"password\": \"1234pass\",\n    \"name\": {\n        \"first\": \"Blessed\",\n        \"last\": \"Sibanda\"\n    },\n    \"address\": {\n        \"state\": \"Midlands\",\n        \"city\": \"Gweru\",\n        \"line1\": \"123 Main Street\",\n        \"zip\": \"00263\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/v2/users",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v2",
+										"users"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
