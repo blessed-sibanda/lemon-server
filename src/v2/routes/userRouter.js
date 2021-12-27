@@ -8,6 +8,7 @@ const {
   isProfileOwnerOrManager,
   isManager,
 } = require('../../services/authService');
+require('mongoose-paginate-v2');
 
 const router = Router();
 

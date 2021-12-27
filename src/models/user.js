@@ -1,75 +1,78 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    trim: true,
-    unique: 'Email already exists',
-    match: [/.+\@.+\..+/, 'Please fill a valid email address'],
-    required: [true, 'Email is required'],
-  },
-  name: {
-    first: {
+const userSchema = new mongoose.Schema(
+  {
+    email: {
       type: String,
       trim: true,
-      required: [true, 'First Name is required'],
+      unique: 'Email already exists',
+      match: [/.+\@.+\..+/, 'Please fill a valid email address'],
+      required: [true, 'Email is required'],
     },
-    middle: String,
-    last: {
-      type: String,
-      trim: true,
-      required: [true, 'Last Name is required'],
-    },
-  },
-  picture: String,
-  role: {
-    type: String,
-    enum: ['none', 'manager', 'clerk', 'cashier'],
-    default: 'none',
-  },
-  userStatus: Boolean,
-  level: Number,
-  dateOfBirth: Date,
-  address: {
-    line1: {
-      type: String,
-      trim: true,
-      required: [true, 'Address line is required'],
-    },
-    line2: String,
-    city: {
-      type: String,
-      required: [true, 'City is required'],
-    },
-    state: {
-      type: String,
-      required: [true, 'State is required'],
-    },
-    zip: {
-      type: String,
-      required: [true, 'Zip is required'],
-    },
-  },
-  hashedPassword: {
-    type: String,
-    required: [true, 'Password is required'],
-  },
-  salt: String,
-  phones: [
-    {
-      type: {
+    name: {
+      first: {
         type: String,
-        enum: ['work', 'mobile', 'none', 'home'],
-        default: 'none',
+        trim: true,
+        required: [true, 'First Name is required'],
       },
-      digits: {
+      middle: String,
+      last: {
         type: String,
-        required: [true, 'Phone number is required'],
+        trim: true,
+        required: [true, 'Last Name is required'],
       },
     },
-  ],
-});
+    picture: String,
+    role: {
+      type: String,
+      enum: ['none', 'manager', 'clerk', 'cashier'],
+      default: 'none',
+    },
+    userStatus: Boolean,
+    level: Number,
+    dateOfBirth: Date,
+    address: {
+      line1: {
+        type: String,
+        trim: true,
+        required: [true, 'Address line is required'],
+      },
+      line2: String,
+      city: {
+        type: String,
+        required: [true, 'City is required'],
+      },
+      state: {
+        type: String,
+        required: [true, 'State is required'],
+      },
+      zip: {
+        type: String,
+        required: [true, 'Zip is required'],
+      },
+    },
+    hashedPassword: {
+      type: String,
+      required: [true, 'Password is required'],
+    },
+    salt: String,
+    phones: [
+      {
+        type: {
+          type: String,
+          enum: ['work', 'mobile', 'none', 'home'],
+          default: 'none',
+        },
+        digits: {
+          type: String,
+          required: [true, 'Phone number is required'],
+        },
+      },
+    ],
+  },
+  { timestamps: true },
+);
 
 userSchema
   .virtual('password')
