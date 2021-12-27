@@ -29,7 +29,7 @@ const formatError = (err) => {
         break;
     }
     return { error: message };
-  } else {
+  } else if (err.errors) {
     let errors = {};
 
     for (let errName in err.errors) {
@@ -47,6 +47,8 @@ const formatError = (err) => {
       }
     }
     return { errors };
+  } else {
+    return { error: err.message };
   }
 };
 

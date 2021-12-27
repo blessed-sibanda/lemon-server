@@ -1,11 +1,20 @@
 const { Router } = require('express');
+const merge = require('lodash/merge');
 const { formatError } = require('../../helpers/dbErrorHandler');
-const { createNewUser } = require('../../services/userService');
+const { userById } = require('../../services/userService');
 const User = require('../../models/user');
+const {
+  requireAuth,
+  isProfileOwnerOrManager,
+  isManager,
+} = require('../../services/authService');
 
 const router = Router();
 
-router.get('/', async (req, res) => {});
+router.get('/', async (req, res) => {
+  let users = await User.find().sort('-createdAt');
+  res.json(users);
+});
 
 router.post('/', async (req, res) => {
   try {
@@ -16,8 +25,24 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/:userId', async (req, res) => {});
+router.param('userId', userById);
 
-router.put('/:userId', async (req, res) => {});
+router.get('/:userId', requireAuth, isProfileOwnerOrManager, async (req, res) => {
+  res.json(req.profile);
+});
+
+router.put('/:userId', requireAuth, isManager, async (req, res) => {
+  try {
+    delete req.body._id;
+    delete req.body.hashedPassword;
+    delete req.body.salt;
+
+    let user = merge(req.profile, req.body);
+    user = await user.save();
+    res.json(user);
+  } catch (err) {
+    res.status(400).json(formatError(err));
+  }
+});
 
 module.exports = router;

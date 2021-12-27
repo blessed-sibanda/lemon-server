@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 require('../src/models/db');
 
@@ -16,5 +15,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/v1', v1Router);
 app.use('/v2', v2Router);
+
+app.use((err, req, res, next) => {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json({ error: err.name + ': ' + err.message });
+  } else if (err) {
+    res.status(400).json({ error: err.name + ': ' + err.message });
+    console.log(err);
+  }
+});
 
 module.exports = app;
