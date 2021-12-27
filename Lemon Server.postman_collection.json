@@ -124,13 +124,31 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/v2/users",
+									"raw": "{{url}}/v2/users?filter=hotmail&sort=-firstName&skip=3&limit=3",
 									"host": [
 										"{{url}}"
 									],
 									"path": [
 										"v2",
 										"users"
+									],
+									"query": [
+										{
+											"key": "filter",
+											"value": "hotmail"
+										},
+										{
+											"key": "sort",
+											"value": "-firstName"
+										},
+										{
+											"key": "skip",
+											"value": "3"
+										},
+										{
+											"key": "limit",
+											"value": "3"
+										}
 									]
 								}
 							},
