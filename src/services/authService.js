@@ -28,7 +28,7 @@ module.exports = {
       (req.profile._id == req.auth.sub || req.auth.role == 'manager');
     if (!authorized)
       return res.status(403).json({
-        error: 'Only manager or profile owner is authorized',
+        message: 'Only manager or profile owner is authorized',
       });
     next();
   },
@@ -36,7 +36,7 @@ module.exports = {
     const authorized = req.auth && req.auth.role == 'manager';
     if (!authorized)
       return res.status(403).json({
-        error: 'Only manager is authorized',
+        message: 'Only manager is authorized',
       });
     next();
   },

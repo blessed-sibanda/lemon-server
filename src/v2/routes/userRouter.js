@@ -40,11 +40,14 @@ router.get('/:userId', requireAuth, isProfileOwnerOrManager, async (req, res) =>
   res.json(req.profile);
 });
 
-router.put('/:userId', requireAuth, isManager, async (req, res) => {
+router.put('/:userId', requireAuth, isProfileOwnerOrManager, async (req, res) => {
   try {
     delete req.body._id;
     delete req.body.hashedPassword;
     delete req.body.salt;
+
+    if (req.body.email && req.body.email.trim() === req.profile.email)
+      delete req.body.email;
 
     let user = merge(req.profile, req.body);
     user = await user.save();
